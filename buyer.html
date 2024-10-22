@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AUCTIFY - Browse Auctions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --background-dark: #121212;
+            --surface-dark: #1f1f1f;
+            --error-color: #cf6679;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: #ffffff;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            padding-top: 76px;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+
+        .nav-btn {
+            background-color: var(--primary-color);
+            color: var(--background-dark);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+        }
+
+        .filters-section {
+            background-color: var(--surface-dark);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-control, .form-select {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-radius: 10px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary-color);
+            color: #ffffff;
+            box-shadow: 0 0 0 0.2rem rgba(187, 134, 252, 0.25);
+        }
+
+        .auction-card {
+            background-color: var(--surface-dark);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(187, 134, 252, 0.1);
+        }
+
+        .auction-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .auction-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .auction-details {
+            padding: 1.5rem;
+        }
+
+        .auction-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .auction-price {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            margin: 1rem 0;
+        }
+
+        .time-left {
+            color: var(--error-color);
+            font-weight: 500;
+        }
+
+        .bid-btn {
+            background-color: var(--primary-color);
+            color: var(--background-dark);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .bid -btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .category-badge {
+            background-color: rgba(187, 134, 252, 0.2);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background-color: var(--surface-dark);
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        .pagination .page-link {
+            background-color: var(--surface-dark);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .pagination .page-link:hover {
+            background-color: var(--primary-color);
+            color: var(--background-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">AUCTIFY</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <div class="d-flex align-items-center">
+                    <button class="nav-btn" onclick="window.location.href='bruh2.html'">Home</button>
+                    <button class="nav-btn" onclick="window.location.href='cart.html'">Bid Tracker</button>
+                    <img src="ss3.png" alt="Icon" class="icon">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="filter-title">Category</div>
+                    <select class="form-select" name="category">
+                        <option value="All Categories">All Categories</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Vehicles">Vehicles</option>
+                        <option value="Art & Collectibles">Art & Collectibles</option>
+                        <option value="Jewelry & Watches">Jewelry & Watches</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <div class="filter-title">Price Range</div>
+                    <select class="form-select" name="price">
+                        <option value="All Prices">All Prices</option>
+                        <option value="Under $100">Under $100</option>
+                        <option value="$100 - $500">$100 - $500</option>
+                        <option value="$500 - $1000">$500 - $1000</option>
+                        <option value="Over $1000">Over $1000</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <div class="filter-title">Time Left</div>
+                    <select class="form-select" name="time">
+                        <option value="Any Time">Any Time</option>
+                        <option value="Ending Soon">Ending Soon</option>
+                        <option value="Ending Today">Ending Today</option>
+                        <option value="Ending This Week">Ending This Week</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <div class="filter-title">Sort By</div>
+                    <select class="form-select">
+                        <option>Newest First</option>
+                        <option>Ending Soon</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auction Items Grid -->
+        <div class="row">
+            <!-- Item 1 -->
+            <div class="col-md-4 auction-item" data-category="Watches" data-price="4500" data-time="2">
+                <div class="auction-card">
+                    <img src="https://cdn.luxepolis.com/media/catalog/product/cache/1/image/730x/0318cfb9316a6efcd6b4493acc8e507a/v/e/vewt2029-ve-vewt2029-2.jpg" alt="Luxury Watch" class="auction-image">
+                    <div class="auction-details">
+                        <span class="category-badge">Watches</span>
+                        <h3 class="auction-title">Luxury Chronograph Watch</h3>
+                        <p class ="mb-2">Limited Edition Automatic Movement</p>
+                        <div class="auction-price">Current Bid: $4,500</div>
+                        <p class="time-left"><i class="fas fa-clock me-2"></i>2 hours left</p>
+                        <button class="bid-btn">Place Bid</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="col-md-4 auction-item" data-category="Vehicles" data-price="75000" data-time="24">
+                <div class="auction-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/1973_Land_Rover_Range_Rover_3.5.jpg" alt="Classic Car" class="auction-image">
+                    <div class="auction-details">
+                        <span class="category-badge">Vehicles</span>
+                        <h3 class="auction-title">1967 Classic Sports Car</h3>
+                        <p class="mb-2">Fully Restored, Original Parts</p>
+                        <div class="auction-price">Current Bid: $75,000</div>
+                        <p class="time-left"><i class="fas fa-clock me-2"></i>1 day left</p>
+                        <button class="bid-btn">Place Bid</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="col-md-4 auction-item" data-category="Art" data-price="12800" data-time="120">
+                <div class="auction-card">
+                    <img src="https://i.etsystatic.com/11606131/r/il/36c792/2850569071/il_1588xN.2850569071_6iqo.jpg" alt="Art Piece" class="auction-image">
+                    <div class="auction-details">
+                        <span class="category-badge">Art</span>
+                        <h3 class="auction-title">Contemporary Abstract Painting</h3>
+                        <p class="mb-2">Original Canvas, Signed by Artist</p>
+                        <div class="auction-price">Current Bid: $12,800</div>
+                        <p class="time-left"><i class="fas fa-clock me-2"></i>5 days left</p>
+                        <button class="bid-btn">Place Bid</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="col-md-4 auction-item" data-category="Photography" data-price="300" data-time="72">
+                <div class="auction-card">
+                    <img src="https://5.imimg.com/data5/SELLER/Default/2023/5/307956259/KX/QQ/ZM/189707748/vintage-cameras-for-sale-including-devry-camera-500x500.jpg" alt="Vintage Camera" class="auction-image">
+                    <div class="auction-details">
+                        <span class="category-badge">Photography</span>
+                        <h3 class="auction-title">Vintage Film Camera</h3>
+                        <p class="mb-2">Classic Model from the 1960s</p>
+                        <div class="auction-price">Current Bid: $300</div>
+                        <p class="time-left"><i class="fas fa-clock me-2"></i>3 days left</p>
+                        <button class="bid-btn">Place Bid</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="col-md-4 auction-item" data-category="Electronics" data-price="499" data-time="4">
+                <div class="auction-card">
+                    <img src="https://cdn.mos.cms.futurecdn.net/Vh6eSp4siwggK7RUys72nP-1200-80.jpg.webp" alt="Gaming Console" class="auction-image">
+                    <div class="auction-details">
+                        <span class="category-badge">Electronics</span>
+                        <h3 class="auction-title">Next-Gen Gaming Console</h3>
+                        <p class="mb-2">Brand New, Unopened Box</p>
+                        <div class="auction-price">Current Bid: $499</div>
+                        <p class="time-left"><i class="fas fa-clock me-2"></i>4 hours left</p>
+                        <button class="bid-btn">Place Bid</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="col-md-4 auction-item" data-category="Furniture" data-price="1200" data-time="48">
+                <div class="auction-card">
+                    <img src="https://media.architecturaldigest.com/photos/62e7d4efc767ddbc96686e83/16:9/w_2240,c_limit/Mediterranean-JennaPeffley.jpeg" alt="Antique Furniture" class="auction-image">
+                    <div class="auction-details">
+                        <span class="category-badge">Furniture</span>
+                        <h3 class="auction-title">Antique Oak Dining Table</h3>
+                        <p class="mb-2">Beautifully Crafted, 19th Century</p>
+                        <div class="auction-price">Current Bid: $1,200</div>
+                        <p class="time-left"><i class="fas fa-clock me-2"></i>2 days left</p>
+                        <button class="bid-btn">Place Bid</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="my-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p>© 2024 AUCTIFY. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const auctionItems = document.querySelectorAll('.auction-item');
+            const categoryFilter = document.querySelector('select[name="category"]');
+            const priceFilter = document.querySelector('select[name="price"]');
+            const timeFilter = document.querySelector('select[name="time"]');
+
+            function filterItems() {
+                const selectedCategory = categoryFilter.value;
+                const selectedPrice = priceFilter.value;
+                const selectedTime = timeFilter.value;
+
+                auctionItems.forEach(item => {
+                    const category = item.dataset.category;
+                    const price = parseFloat(item.dataset.price);
+                    const timeLeft = parseInt(item.dataset.time);
+
+                    // Check category
+                    const categoryMatch = selectedCategory === 'All Categories' || category === selectedCategory;
+
+                    // Check price
+                    let priceMatch = true;
+                    if (selectedPrice === 'Under $100') {
+                        priceMatch = price < 100;
+                    } else if (selectedPrice === '$100 - $500') {
+                        priceMatch = price >= 100 && price <= 500;
+                    } else if (selectedPrice === '$500 - $1000') {
+                        priceMatch = price > 500 && price <= 1000;
+                    } else if (selectedPrice === 'Over $1000') {
+                        priceMatch = price > 1000;
+                    }
+
+                    // Check time left
+                    let timeMatch = true;
+                    if (selectedTime === 'Ending Soon') {
+                        timeMatch = timeLeft <= 3; // Assuming "Ending Soon" means less than 3 hours
+                    } else if (selectedTime === 'Ending Today') {
+                        timeMatch = timeLeft <= 24; // Assuming "Ending Today" means less than 24 hours
+                    } else if (selectedTime === 'Ending This Week') {
+                        timeMatch = timeLeft <= 168; // Assuming "Ending This Week" means less than 168 hours
+                    }
+
+                    // Show or hide item based on filter criteria
+                    if (categoryMatch && priceMatch && timeMatch) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+
+            // Attach event listeners to filter dropdowns
+            categoryFilter.addEventListener('change', filterItems);
+            priceFilter.addEventListener('change', filterItems);
+            timeFilter.addEventListener('change', filterItems);
+
+            // Initial filter application
+            filterItems();
+        });
+    </script>
+</body>
+</html>

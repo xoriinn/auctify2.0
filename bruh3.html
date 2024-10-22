@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AUCTIFY</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --background-dark: #121212;
+            --surface-dark: #1f1f1f;
+            --error-color: #cf6679;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: #ffffff;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+
+        .nav-btn {
+            background-color: var(--primary-color);
+            color: var(--background-dark);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .icon {
+            width: 40px; /* Adjust size */
+            height: 40px; /* Adjust size */
+            margin-left: 10px; /* Add margin for spacing */
+        }
+
+        .hero-section {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center content vertically */
+            background: url('https://assets.farmersbid.com/eyJidWNrZXQiOiJhc3NldHMuZmFybWVyc2JpZC5jb20iLCJrZXkiOiJpbWcvYXVjdGlvbi1vci1qdWRnZS1nYXZlbC1vbi1hLWxhcHRvcC1QRTRRSzZMLmpwZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6MTgwMCwiaGVpZ2h0Ijo5MDAsInBvc2l0aW9uIjoiY2VudGVyIiwiZml0IjoiY292ZXIifSwid2l0aE1ldGFkYXRhIjp0cnVlLCJ0b0Zvcm1hdCI6ImpwZWciLCJqcGVnIjp7InF1YWxpdHkiOjgwLCJwcm9ncmVzc2l2ZSI6ZmFsc2UsIm9wdGltaXNlQ29kaW5nIjp0cnVlLCJ0cmVsbGlzUXVhbnRpc2F0aW9uIjp0cnVlLCJvdmVyc2hvb3REZXJpbmdpbmciOnRydWV9fX0=') center/cover no-repeat;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px; /* Rounded corners for the background */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); /* Dim light effect */
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay for text contrast */
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2; /* Ensure it is above the overlay */
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .service-card {
+            background: var(--surface-dark);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(187, 134, 252, 0.1);
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-card img {
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .featured-items {
+            padding: 4rem 0;
+            background-color: var(--surface-dark);
+            margin: 4rem 0;
+        }
+
+        .featured-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .featured-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .featured-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .featured-item .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 15px;
+        }
+
+        .featured-item:hover .overlay {
+            opacity: 1;
+        }
+
+        footer {
+            background-color: var(--surface-dark);
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon__link {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icon__link:hover {
+            color: var(--secondary-color);
+        }
+
+        .animate-fade-up {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        :root {
+            --primary-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --background-dark: #121212;
+            --surface-dark: #1f1f1f;
+            --error-color: #cf6679;
+        }
+
+        /* All previous styles remain unchanged */
+        
+        /* Modified icon styles */
+        .settings-icon {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .settings-icon:hover {
+            color: var(--secondary-color);
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar with modified icon -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">AUCTIFY</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <div class="d-flex align-items-center">
+                    <button class="nav-btn" onclick="window.location.href='bruh2.html'">Home</button>
+                    <button class="nav-btn" onclick="window.location.href='connect.html'">Connect with Us</button>
+                    <!-- Replaced image with Font Awesome settings icon -->
+                    <a href="settings.html">
+                        <i class="fas fa-cog settings-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-content animate-fade-up">
+        <h1 class="hero-title">Welcome to AUCTIFY</h1>
+        <p class="lead text-white mb-4">Your Premier Online Auction Platform</p>
+        <button class="nav-btn" onclick="window.location.href='signup.login.html'">Join Us</button>
+        
+    </div>
+</section>
+
+    <!-- Services Section -->
+   
+<section class="container py-5">
+    <h2 class="text-center mb-5" style="color: var(--primary-color)">Our Services</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="service-card">
+                <img src="https://canoo.ca/wp-content/uploads/2023/08/Hero-2.png" alt="Online Selling Platform" class="img-fluid">
+                <h3 class="text-primary mb-3" ondblclick="window.location.href='seller.html'">Sell</h3>
+                <p>Expand your business reach and maximize profits through our secure auction platform.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="service-card">
+                <img src="ss2.png" alt="Bidding Interface" class="img-fluid">
+                <h3 class="text-primary mb-3" ondblclick="window.location.href='buyer.html'">Buy</h3>
+                <p>Find unique items and great deals from verified sellers across the platform.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="service-card">
+                <img src="https://www.apple.com/newsroom/images/live-action/wwdc-2023/standard/privacy/Apple-WWDC23-privacy-logo-230605_big.jpg.large_2x.jpg" alt="Security Features" class="img-fluid">
+                <h3 class="text-primary mb-3" ondblclick="window.location.href='security.html'">Security/T&C</h3>
+                <p>Government certified platform ensuring safe and secure transactions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Featured Items Section -->
+    <section class="featured-items">
+        <div class="container">
+            <h2 class="text-center mb-5" style="color: var(--primary-color)">Featured Auctions</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="featured-item">
+                        <img src="https://i.pinimg.com/736x/ab/cf/dc/abcfdcd45a517d4796350047a49db7b2.jpg" alt="Luxury Watch Auction">
+                        <div class="overlay">Watch Collection Sale</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="featured-item">
+                        <img src="https://automuseums.info/sites/default/files/74821020_2588579474576578_480662468838817792_o.jpg" alt="Classic Car Auction">
+                        <div class="overlay">Car Collection Sale</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="featured-item">
+                        <img src="https://www.larryslist.com/artmarket/wp-content/uploads/Progressive-Art-Collection.jpeg" alt="Art Collection Auction">
+                        <div class="overlay">Art Gallery Sale</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <h3 class="footer-title">Connect with Us</h3>
+            <p>Follow us on social media and stay updated with the latest auctions.</p>
+            <p>Under the Guidance of : Dr. Aakash </p>
+            <p>Coded by :Sachin Goyal (2310991035),
+                Pankit Sheoran (2310991007),
+                Satwik Sharma (2310991045),
+                Vishwas Chaurasia (2310992482).
+            </p>
+            <div class="social-icons">
+                <a href="#" class="social-icon__link"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon__link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon__link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon__link"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <p class="mt-3">© 2024 AUCTIFY. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html> 
+
+

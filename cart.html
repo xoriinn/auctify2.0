@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AUCTIFY - Bid Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --background-dark: #121212;
+            --surface-dark: #1f1f1f;
+            --error-color: #cf6679;
+            --success-color: #00c853;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: #ffffff;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            padding-top: 80px;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+
+        .nav-btn {
+            background-color: var(--primary-color);
+            color: var(--background-dark);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .dashboard-container {
+            background-color: var(--surface-dark);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+        }
+
+        .auction-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .auction-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .auction-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .bid-info {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .bid-history {
+            max-height: 150px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .bid-history::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .bid-history::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .bid-history::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 5px;
+        }
+
+        .bid-entry {
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .time-remaining {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .current-bid {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .bid-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-winning {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .status-outbid {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        .bid-button {
+            background-color: var(--secondary-color);
+            color: var(--background-dark);
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .bid-button:hover {
+            transform: scale(1.05);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">AUCTIFY</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <div class="d-flex align-items-center">
+                    <button class="nav-btn" onclick="window.location.href='bruh2.html'">Home</button>
+                    <button class="nav-btn" onclick="window.location.href='connect.html'">Connect with Us</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Bid Tracking Dashboard -->
+    <div class="container">
+        <!-- Statistics Overview -->
+        <div class="dashboard-container">
+            <h2 class="mb-4" style="color: var(--primary-color)">Your Bidding Dashboard</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Active Bids</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Winning Bids</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">$425K</div>
+                    <div class="stat-label">Total Bid Amount</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Win Rate</div>
+                </div>
+            </div>
+
+            <!-- Active Auctions -->
+            <h3 class="mb-3" style="color: var(--secondary-color)">Active Auctions</h3>
+            
+            <!-- Auction Item 1 -->
+            <div class="auction-item">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="https://carrwatches.com/wp-content/uploads/2018/11/vintage-rolex-gold-oyster-perpetual-date-model-from-1981-7-e1544697607268.jpeg" alt="Luxury Watch" class="auction-image">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h4>Vintage Rolex Gold oyster perpetual date model from 1981</h4>
+                            <span class="bid-status status-winning">Highest Bidder</span>
+                        </div>
+                        <p>Limited Edition Chronograph Collection</p>
+                        <div class="bid-info">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="current-bid">Current Bid: $25,000</span>
+                                <span class="time-remaining">Time Left: 2h 15m</span>
+                            </div>
+                            <div class="bid-history">
+                                <div class="bid-entry">
+                                    <span>You</span>
+                                    <span>$25,000</span>
+                                    <span>2 hours ago</span>
+                                </div>
+                                <div class="bid-entry">
+                                    <span>John D.</span>
+                                    <span>$24,500</span>
+                                    <span>3 hours ago</span>
+                                </div>
+                                <div class="bid-entry">
+                                    <span>Sarah M.</span>
+                                    <span>$24,000</span>
+                                    <span>4 hours ago</span>
+                                </div>
+                            </div>
+                            <button class="bid-button">Place New Bid</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auction Item 2 -->
+            <div class="auction-item">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="https://images.ctfassets.net/c9t6u0qhbv9e/1984FordMustangPreviewsummary/98d047f64e4f5ab24f7e5a9ef9ad1eed/1984_Ford_Mustang_Preview_summaryImage.jpeg" alt="Classic Car" class="auction-image">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h4>1984 Mustang SvO</h4>
+                            <span class="bid-status status-outbid">Outbid</span>
+                        </div>
+                        <p>1960s Classic Sports Car</p>
+                        <div class="bid-info">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="current-bid">Current Bid: $155,000</span>
+                                <span class="time-remaining">Time Left: 5h 30m</span>
+                            </div>
+                            <div class="bid-history">
+                                <div class="bid-entry">
+                                    <span>Michael R.</span>
+                                    <span>$155,000</span>
+                                    <span>1 hour ago</span>
+                                </div>
+                                <div class="bid-entry">
+                                    <span>You</span>
+                                    <span>$150,000</span>
+                                    <span>2 hours ago</span>
+                                </div>
+                                <div class="bid-entry">
+                                    <span>Emma S.</span>
+                                    <span>$145,000</span>
+                                    <span>3 hours ago</span>
+                                </div>
+                            </div>
+                            <button class="bid-button">Place New Bid</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

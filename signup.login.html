@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AUCTIFY - Buyer Login/Signup</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --background-dark: #121212;
+            --surface-dark: #1f1f1f;
+            --error-color: #cf6679;
+        }
+
+        body {
+            background-color: var(--background-dark);
+            color: #ffffff;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            padding-top: 76px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+
+        .nav-btn {
+            background-color: var(--primary-color);
+            color: var(--background-dark);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+        }
+
+        .auth-container {
+            background-color: var(--surface-dark);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem auto;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            cursor: pointer;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .auth-tab.active {
+            background-color: var(--primary-color);
+            border-radius: 10px 10px 0 0;
+            color: var(--background-dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            color: #ffffff;
+            padding: 0.75rem;
+            border-radius: 10px;
+        }
+
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: var(--secondary-color);
+            color: #ffffff;
+            box-shadow: 0 0 0 0.2rem rgba(3, 218, 198, 0.25);
+        }
+
+        .btn-auth {
+            background-color: var(--primary-color);
+            color: var(--background-dark);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            width: 100%;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-auth:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .social-login {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .social-icon {
+            color: #ffffff;
+        }
+
+        footer {
+            background-color: var(--surface-dark);
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+
+        .password-toggle {
+            position: relative;
+        }
+
+        .password-toggle i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        .password-requirements {
+            color: var(--secondary-color);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--surface-dark);
+            color: white;
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--primary-color);
+        }
+
+        .modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+            margin: 1.5rem 0;
+        }
+
+        .modal-title {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">AUCTIFY</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <div class="d-flex align-items-center">
+                    <button class="nav-btn" onclick="window.location.href='bruh2.html'">Home</button>
+                    <button class="nav-btn" onclick="window.location.href='connect.html'">Connect with Us</button>
+                    <img src="ss3.png" alt="Icon" class="icon">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('login')">Login</div>
+                <div class="auth-tab" onclick="switchTab('signup')">Sign Up</div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Email Address" required>
+                </div>
+                <div class="form-group password-toggle">
+                    <input type="password" class="form-control" placeholder="Password" required>
+                    <i class="fas fa-eye" onclick="togglePassword(this)"></i>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                    </div>
+                    <a href="#" style="color: var(--secondary-color)">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn-auth">Login</button>
+            </form>
+
+            <!-- Sign Up Form -->
+            <form id="signupForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Email Address" required>
+                </div>
+                <div class="form-group password-toggle">
+                    <input type="password" class="form-control" id="signupPassword" placeholder="Password" required>
+                    <i class="fas fa-eye" onclick="togglePassword(this)"></i>
+                    <div class="password-requirements">
+                        Password must be 8+ characters with at least 4 letters and 4 numbers
+                    </div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                <div class="form-group password-toggle">
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+                    <i class="fas fa-eye" onclick="togglePassword(this)"></i>
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="termsAgree" required>
+                    <label class="form-check-label" for="termsAgree">
+                        I agree to the <a href="#" id="termsLink" style="color: var(--secondary-color)" onclick="openTermsModal()">Terms & Conditions</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn-auth">Create Account</button>
+            </form>
+
+            <div class="social-login">
+                <p>Or continue with</p>
+                <button class="social-btn">
+                    <i class="fab fa-google social-icon"></i>
+                </button>
+                <button class="social-btn">
+                    <i class="fab fa-facebook-f social-icon"></i>
+                </button>
+                <button class="social-btn">
+                    <i class="fab fa-apple social-icon"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Terms and Conditions</h3>
+            <div class="modal-body">
+                <p>1. Account Creation and Usage</p>
+                <ul>
+                    <li>Users must be at least 18 years old to create an account</li>
+                    <li>All provided information must be accurate and truthful</li>
+                    <li>Users are responsible for maintaining account security</li>
+                </ul>
+
+                <p>2. Auction Participation</p>
+                <ul>
+                    <li>All bids are binding commitments to purchase</li>
+                    <li>Users must have valid payment methods</li>
+                    <li>Minimum bid increments must be respected</li>
+                </ul>
+
+                <p>3. Privacy and Data</p>
+                <ul>
+                    <li>Personal information is protected under our privacy policy</li>
+                    <li>Usage data may be collected for service improvement</li>
+                    <li>Users can request their data deletion</li>
+                </ul>
+
+                <p>4. Prohibited Activities</p>
+                <ul>
+                    <li>Bid manipulation is strictly forbidden</li>
+                    <li>Fraudulent listings are prohibited</li>
+                    <li>Harassment of other users is not tolerated</li>
+                </ul>
+
+                <p>5. Service Modifications</p>
+                <ul>
+                    <li>AUCTIFY may modify these terms at any time</li>
+                    <li>Users will be notified of significant changes</li>
+                    <li>Continued use implies acceptance of new terms</li>
+                </ul>
+            </div>
+            <button onclick="closeTermsModal()" class="btn-auth">Close</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p> 2024 AUCTIFY. All rights reserved.</p>
+            <p>For any assistance, please contact our support team.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script>
+        function switchTab(tab) {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const tabs = document.querySelectorAll('.auth-tab');
+            
+            if (tab === 'login') {
+                loginForm.style.display = 'block';
+                signupForm.style.display = 'none';
+                tabs[0].classList.add('active');
+                tabs[1].classList.remove('active');
+            } else {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+                tabs[0].classList.remove('active');
+                tabs[1].classList.add('active');
+            }
+        }
+
+ function togglePassword(element) {
+            const input = element.previousElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                element.classList.remove('fa-eye');
+                element.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                element.classList.remove('fa-eye-slash');
+                element.classList.add('fa-eye');
+            }
+        }
+
+        function validatePassword(password) {
+            const minLength = 8;
+            const alphabets = (password.match(/[a-zA-Z]/g) || []).length;
+            const numbers = (password.match(/[0-9]/g) || []).length;
+            return password.length >= minLength && alphabets >= 4 && numbers >= 4;
+        }
+
+        function validatePasswordFields() {
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const passwordError = document.getElementById('passwordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+            if (!validatePassword(password)) {
+                passwordError.style.display = 'block';
+                passwordError.textContent = 'Password must be 8+ characters with at least 4 letters and 4 numbers';
+            } else {
+                passwordError.style.display = 'none';
+            }
+
+            if (password !== confirmPassword) {
+                confirmPasswordError.style.display = 'block';
+                confirmPasswordError.textContent = 'Passwords do not match';
+            } else {
+                confirmPasswordError.style.display = 'none';
+            }
+        }
+
+        function openTermsModal() {
+            const termsModal = document.getElementById('termsModal');
+            termsModal.style.display = 'block';
+        }
+
+        function closeTermsModal() {
+            const termsModal = document.getElementById('termsModal');
+            termsModal.style.display = 'none';
+        }
+
+        document.getElementById('signupForm').addEventListener('input', validatePasswordFields);
+    </script>
+</body>
+</html>
